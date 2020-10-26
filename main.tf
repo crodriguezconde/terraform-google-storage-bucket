@@ -1,3 +1,10 @@
+# This conditions checks whether the user would like to use logging configuration in
+# their Cloud Storage bucket. If set to false, the whole logging block will be ignored.
+
+locals {
+  logging = var.logging_configuration["is_logging_enabled"] == false ? {} : var.logging_configuration
+}
+
 
 resource "google_storage_bucket" "storage_bucket" {
 
@@ -8,9 +15,12 @@ resource "google_storage_bucket" "storage_bucket" {
   versioning {
     enabled = var.is_versioning_enabled
   }
-  logging {
-    log_bucket        = var.log_destination_storage_bucket
-    log_object_prefix = var.log_object_prefix
+  dynamic "logging" {
+    for_each = local.logging
+    content {
+      log_bucket        = var.logging_configuration["log_destination_storage_bucket"]
+      log_object_prefix = var.logging_configuration["log_object_prefix"]
+    }
   }
   requester_pays = var.is_requester_pays_enabled
 }

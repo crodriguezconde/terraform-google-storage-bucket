@@ -27,16 +27,18 @@ variable "is_versioning_enabled" {
   default     = false
 }
 
-variable "log_destination_storage_bucket" {
-  description = "The Google Cloud Storage bucket that will receive log object(s)."
-  type        = string
-  default     = null
-}
-
-variable "log_object_prefix" {
-  description = "(Optional, Computed) The object prefix for log objects. If it is not provided, by default Google Cloud Storage sets this to this bucket's name."
-  type        = string
-  default     = null
+variable "logging_configuration" {
+  description = "An object that describes the behaviour of logging within the Cloud Storage bucket."
+  type = object({
+    is_logging_enabled             = bool,
+    log_destination_storage_bucket = string,
+    log_object_prefix              = string
+  })
+  default = {
+    is_logging_enabled             = false,
+    log_destination_storage_bucket = "The Google Cloud Storage bucket that will receive log object(s).",
+    log_object_prefix              = "(Optional, Computed) The object prefix for log objects. If it is not provided, by default Google Cloud Storage sets this to this bucket's name."
+  }
 }
 
 variable "is_requester_pays_enabled" {
