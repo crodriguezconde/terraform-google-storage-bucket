@@ -1,5 +1,5 @@
 variable "project_id" {
-	description = "The ID of the project in which the resource belongs. If it is not provided, the provider project is used."
+  description = "The ID of the project in which the resource belongs. If it is not provided, the provider project is used."
 }
 
 variable "storage_bucket_name" {
@@ -24,4 +24,8 @@ variable "is_versioning_enabled" {
 
 variable "is_requester_pays_enabled" {
   description = "Enables Requester Pays on a Cloud Storage bucket."
+}
+
+variable "logging_configuration" {
+  description = "Describes the logging configuration for a single Cloud Storage bucket."
 }

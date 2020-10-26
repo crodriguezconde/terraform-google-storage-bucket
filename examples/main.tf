@@ -22,5 +22,5 @@ module "gcs_bucket" {
   storage_bucket_location   = var.storage_bucket_location
   is_versioning_enabled     = var.is_versioning_enabled
   is_requester_pays_enabled = var.is_requester_pays_enabled
-
+  logging_configuration     = var.logging_configuration
 }
