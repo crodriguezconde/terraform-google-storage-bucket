@@ -30,11 +30,13 @@ variable "is_versioning_enabled" {
 variable "log_destination_storage_bucket" {
   description = "The Google Cloud Storage bucket that will receive log object(s)."
   type        = string
+  default     = null
 }
 
 variable "log_object_prefix" {
   description = "(Optional, Computed) The object prefix for log objects. If it is not provided, by default Google Cloud Storage sets this to this bucket's name."
   type        = string
+  default     = null
 }
 
 variable "is_requester_pays_enabled" {
