@@ -56,7 +56,7 @@ variable "lifecycle_configuration" {
     minimum_object_age           = number,
     object_creation_date         = string,
     object_with_state            = string,
-    object_matches_storage_class = string,
+    object_matches_storage_class = list,
     limit_num_object_versions    = number
   })
   default = {
@@ -66,7 +66,7 @@ variable "lifecycle_configuration" {
     minimum_object_age           = null,
     object_creation_date         = null,
     object_with_state            = null,
-    object_matches_storage_class = null,
+    object_matches_storage_class = ["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"],
     limit_num_object_versions    = null
   }
 }
