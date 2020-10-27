@@ -24,18 +24,18 @@ resource "google_storage_bucket" "storage_bucket" {
   requester_pays = var.is_requester_pays_enabled
 
   dynamic "lifecycle_rule" {
-    for_each = var.lifecycle_configuration["is_lifecycle_rules_enabled"] == false ? [] : var.lifecycle_configuration[*]
+    for_each = var.is_lifecycle_rules_enabled == false ? [] : var.lifecycle_configuration
     content {
       action {
-        type          = var.lifecycle_configuration["lifecycle_action_type"]
-        storage_class = var.lifecycle_configuration["lifecycle_action_type"] == "SetStorageClass" ? var.lifecycle_configuration["target_storage_class"] : null
+        type          = var.lifecycle_configuration[lifecycle_rule.key]["lifecycle_action_type"]
+        storage_class = var.lifecycle_configuration[lifecycle_rule.key]["lifecycle_action_type"] == "SetStorageClass" ? var.lifecycle_configuration[lifecycle_rule.key]["target_storage_class"] : null
       }
       condition {
-        age                   = var.lifecycle_configuration["minimum_object_age"]
-        created_before        = var.lifecycle_configuration["object_creation_date"]
-        with_state            = var.lifecycle_configuration["object_with_state"]
-        matches_storage_class = var.lifecycle_configuration["object_matches_storage_class"]
-        num_newer_versions    = var.is_versioning_enabled == true ? var.lifecycle_configuration["limit_num_object_versions"] : null
+        age                   = var.lifecycle_configuration[lifecycle_rule.key]["minimum_object_age"]
+        created_before        = var.lifecycle_configuration[lifecycle_rule.key]["object_creation_date"]
+        with_state            = var.lifecycle_configuration[lifecycle_rule.key]["object_with_state"]
+        matches_storage_class = var.lifecycle_configuration[lifecycle_rule.key]["object_matches_storage_class"]
+        num_newer_versions    = var.is_versioning_enabled == true ? var.lifecycle_configuration[lifecycle_rule.key]["limit_num_object_versions"] : null
       }
     }
   }

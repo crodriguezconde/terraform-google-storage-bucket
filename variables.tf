@@ -47,10 +47,15 @@ variable "is_requester_pays_enabled" {
   default     = false
 }
 
+variable "is_lifecycle_rules_enabled" {
+  description = "Whether lifecycle configuration(s) are active on the Cloud Storage bucket"
+  type        = bool
+  default     = false
+}
+
 variable "lifecycle_configuration" {
   description = "Defines lifecycle configuration for object(s) inside the Cloud Storage bucket."
-  type = object({
-    is_lifecycle_rules_enabled   = bool,
+  type = list(object({
     lifecycle_action_type        = string,
     target_storage_class         = string,
     minimum_object_age           = number,
@@ -58,9 +63,8 @@ variable "lifecycle_configuration" {
     object_with_state            = string,
     object_matches_storage_class = list(string),
     limit_num_object_versions    = number
-  })
-  default = {
-    is_lifecycle_rules_enabled   = false,
+  }))
+  default = [{
     lifecycle_action_type        = null,
     target_storage_class         = null,
     minimum_object_age           = null,
@@ -68,6 +72,6 @@ variable "lifecycle_configuration" {
     object_with_state            = null,
     object_matches_storage_class = ["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"],
     limit_num_object_versions    = null
-  }
+  }]
 }
 
