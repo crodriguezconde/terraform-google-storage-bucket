@@ -34,7 +34,7 @@ resource "google_storage_bucket" "storage_bucket" {
         age                   = var.lifecycle_configuration[lifecycle_rule.key]["minimum_object_age"]
         created_before        = var.lifecycle_configuration[lifecycle_rule.key]["object_creation_date"]
         with_state            = var.lifecycle_configuration[lifecycle_rule.key]["object_with_state"]
-        matches_storage_class = var.lifecycle_configuration[lifecycle_rule.key]["object_matches_storage_class"]
+        matches_storage_class = var.lifecycle_configuration[lifecycle_rule.key]["object_matches_storage_class"] == [] ? null : var.lifecycle_configuration[lifecycle_rule.key]["object_matches_storage_class"]
         num_newer_versions    = var.is_versioning_enabled == true ? var.lifecycle_configuration[lifecycle_rule.key]["limit_num_object_versions"] : null
       }
     }
