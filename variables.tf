@@ -56,7 +56,7 @@ variable "lifecycle_configuration" {
     minimum_object_age           = number,
     object_creation_date         = string,
     object_with_state            = string,
-    object_matches_storage_class = list,
+    object_matches_storage_class = list(string),
     limit_num_object_versions    = number
   })
   default = {
