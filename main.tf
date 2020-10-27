@@ -25,15 +25,21 @@ resource "google_storage_bucket" "storage_bucket" {
 
   dynamic "lifecycle_rule" {
     for_each = var.is_lifecycle_rules_enabled == false ? [] : var.lifecycle_configuration
+    # Since a user can create more than 1 lifecycle rule, this dynamic block will be created as many lifecycle rules the user 
+    # creates. The lifecycle_rule.key corresponds to the position of the lifecycle rules inside the list, which are in itself
+    # object(s) containing the necessary configuration.
     content {
       action {
         type          = var.lifecycle_configuration[lifecycle_rule.key]["lifecycle_action_type"]
         storage_class = var.lifecycle_configuration[lifecycle_rule.key]["lifecycle_action_type"] == "SetStorageClass" ? var.lifecycle_configuration[lifecycle_rule.key]["target_storage_class"] : null
       }
       condition {
-        age                   = var.lifecycle_configuration[lifecycle_rule.key]["minimum_object_age"]
-        created_before        = var.lifecycle_configuration[lifecycle_rule.key]["object_creation_date"]
-        with_state            = var.lifecycle_configuration[lifecycle_rule.key]["object_with_state"]
+        age            = var.lifecycle_configuration[lifecycle_rule.key]["minimum_object_age"]
+        created_before = var.lifecycle_configuration[lifecycle_rule.key]["object_creation_date"]
+        with_state     = var.lifecycle_configuration[lifecycle_rule.key]["object_with_state"]
+        # This validation is necessary, as a null list in Terraform is expressed as [] rather than null, which could cause errors
+        # when creating the bucket. As a consequence, if there is a [] per value, we will assume that the user did not configure
+        # this property and we will convert it to null before passing it to terraform plan or apply.
         matches_storage_class = var.lifecycle_configuration[lifecycle_rule.key]["object_matches_storage_class"] == [] ? null : var.lifecycle_configuration[lifecycle_rule.key]["object_matches_storage_class"]
         num_newer_versions    = var.is_versioning_enabled == true ? var.lifecycle_configuration[lifecycle_rule.key]["limit_num_object_versions"] : null
       }
