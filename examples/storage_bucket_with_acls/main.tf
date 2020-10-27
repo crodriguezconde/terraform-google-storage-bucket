@@ -15,7 +15,7 @@ provider "google" {
 
 module "gcs_bucket" {
 
-  source = "git::https://github.com/crodriguezconde/terraform-google-storage-bucket.git?ref=release-gcs"
+  source = "git::https://github.com/crodriguezconde/terraform-google-storage-bucket.git"
   # Bear in mind the Cloud Storage bucket name must be unique.
   storage_bucket_name       = var.storage_bucket_name
   is_force_destroy_enabled  = var.is_force_destroy_enabled
