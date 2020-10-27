@@ -11,4 +11,4 @@ logging_configuration = {
 
 }
 storage_bucket_access_role = "READER"
-storage_bucket_entity = "user-example@gmail.com"
+storage_bucket_entity      = "user-example@gmail.com"
