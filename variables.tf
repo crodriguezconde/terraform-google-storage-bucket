@@ -46,3 +46,28 @@ variable "is_requester_pays_enabled" {
   type        = bool
   default     = false
 }
+
+variable "lifecycle_configuration" {
+  description = "Defines lifecycle configuration for object(s) inside the Cloud Storage bucket."
+  type = object({
+    is_lifecycle_rules_enabled   = bool,
+    lifecycle_action_type        = string,
+    target_storage_class         = string,
+    minimum_object_age           = number,
+    object_creation_date         = string,
+    object_with_state            = string,
+    object_matches_storage_class = string,
+    limit_num_object_versions    = number
+  })
+  default = {
+    is_lifecycle_rules_enabled   = false,
+    lifecycle_action_type        = null,
+    target_storage_class         = null,
+    minimum_object_age           = null,
+    object_creation_date         = null,
+    object_with_state            = null,
+    object_matches_storage_class = null,
+    limit_num_object_versions    = null
+  }
+}
+
