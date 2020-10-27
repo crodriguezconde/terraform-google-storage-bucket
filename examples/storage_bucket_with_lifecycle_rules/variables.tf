@@ -34,3 +34,7 @@ variable "logging_configuration" {
 variable "lifecycle_configuration" {
   description = "Describes the lifecycle configuration for the object(s) inside the Cloud Storage bucket."
 }
+
+variable "is_lifecycle_rules_enabled" {
+  description = "Whether the lifecycle configuration is enabled for the Cloud Storage bucket."
+}
