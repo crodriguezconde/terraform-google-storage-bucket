@@ -30,10 +30,10 @@ variable "logging_configuration" {
   description = "Describes the logging configuration for a single Cloud Storage bucket."
 }
 
-variable "storage_bucket_access_role" {
-	description = "The access permission for the entity. Possible values are OWNER, READER & WRITER."
+variable "storage_bucket_access_role" {
+  description = "The access permission for the entity. Possible values are OWNER, READER & WRITER."
 }
 
 variable "storage_bucket_entity" {
-	description = "The entity holding the permission, in one of the following forms: user-userId user-email group-groupId group-email domain-domain project-team-projectId allUsers allAuthenticatedUsers"
+  description = "The entity holding the permission, in one of the following forms: user-userId user-email group-groupId group-email domain-domain project-team-projectId allUsers allAuthenticatedUsers"
 }

@@ -1,17 +1,17 @@
 terraform {
-	required_providers {
-		google = {
-			source = "hashicorp/google"
-			version = "<=3.43"
-		}
-	}
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "<=3.43"
+    }
+  }
 }
 
 provider "google" {
-	project = var.project_id
+  project = var.project_id
 }
 
- # ======= GOOGLE CLOUD STORAGE BUCKET DEFINITION ======= #
+# ======= GOOGLE CLOUD STORAGE BUCKET DEFINITION ======= #
 
 module "gcs_bucket" {
 
@@ -26,10 +26,10 @@ module "gcs_bucket" {
 }
 
 module "gcs_bucket_acl" {
-	source = "git::https://github.com/crodriguezconde/terraform-google-storage-bucket.git//modules/storage_bucket_acl"
-	storage_bucket_name = module.gcs_bucket.storage_bucket_name
-	storage_bucket_access_role = var.storage_bucket_access_role
-	storage_bucket_entity = var.storage_bucket_entity
+  source                     = "git::https://github.com/crodriguezconde/terraform-google-storage-bucket.git//modules/storage_bucket_acl"
+  storage_bucket_name        = module.gcs_bucket.storage_bucket_name
+  storage_bucket_access_role = var.storage_bucket_access_role
+  storage_bucket_entity      = var.storage_bucket_entity
 
 
 }
