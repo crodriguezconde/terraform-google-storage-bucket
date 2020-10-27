@@ -65,13 +65,19 @@ variable "lifecycle_configuration" {
     limit_num_object_versions    = number
   }))
   default = [{
-    lifecycle_action_type        = null,
-    target_storage_class         = null,
-    minimum_object_age           = null,
+    lifecycle_action_type        = "SetStorageClass"
+    target_storage_class         = "STANDARD",
+    minimum_object_age           = 0,
     object_creation_date         = null,
     object_with_state            = null,
     object_matches_storage_class = ["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"],
     limit_num_object_versions    = null
   }]
+
+	validation {
+		condition = var.lifecycle_configuration[0].lifecycle_action_type == "SetStorageClass" || var.lifecycle_configuration[0].lifecycle_action_type == "Delete"
+		error_message = "The type of action of the lifecycle rule must be either Delete or SetStorageClass."
+	}
 }
+
 
