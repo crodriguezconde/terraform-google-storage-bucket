@@ -66,7 +66,7 @@ variable "lifecycle_configuration" {
   }))
   default = [{
     lifecycle_action_type        = "SetStorageClass"
-    target_storage_class         = "STANDARD",
+    target_storage_class         = "REGIONAL",
     minimum_object_age           = 0,
     object_creation_date         = null,
     object_with_state            = null,
@@ -81,6 +81,11 @@ variable "lifecycle_configuration" {
     # for the first false statement that it encounters and throws true if found. As error_message will only trigger if condition is false, we invert the result using !
     condition     = ! contains([for action_type in var.lifecycle_configuration[*].lifecycle_action_type : action_type == "SetStorageClass" || action_type == "Delete" ? true : false], false)
     error_message = "The type of action of the lifecycle rule must be either Delete or SetStorageClass."
+  }
+
+  validation {
+    condition     = ! contains([for target_storage_class in var.lifecycle_configuration[*].target_storage_class : contains(["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE"], target_storage_class)], false)
+    error_message = "The Storage Class must be MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, or ARCHIVE."
   }
 }
 
