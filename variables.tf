@@ -75,6 +75,10 @@ variable "lifecycle_configuration" {
   }]
 
   validation {
+    # Terraform does not provide an easy way to loop-validate list(s) of object(s), or any type of object(s) using the validation condition. This condition loops each
+    # lifecycle_action_type there is (in case the user defines more than 1) and stores the result of the validation in a list like: [true, false, false, true]. 
+    # Once we have the list, we have to throw a false to trigger the error_message, as it means that the user has input a not valid action_type. The contains searches
+    # for the first false statement that it encounters and throws true if found. As error_message will only trigger if condition is false, we invert the result using !
     condition     = ! contains([for action_type in var.lifecycle_configuration[*].lifecycle_action_type : action_type == "SetStorageClass" || action_type == "Delete" ? true : false], false)
     error_message = "The type of action of the lifecycle rule must be either Delete or SetStorageClass."
   }
