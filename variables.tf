@@ -74,10 +74,10 @@ variable "lifecycle_configuration" {
     limit_num_object_versions    = null
   }]
 
-	validation {
-		condition = var.lifecycle_configuration[0].lifecycle_action_type == "SetStorageClass" || var.lifecycle_configuration[0].lifecycle_action_type == "Delete"
-		error_message = "The type of action of the lifecycle rule must be either Delete or SetStorageClass."
-	}
+  validation {
+    condition     = var.lifecycle_configuration[0].lifecycle_action_type == "SetStorageClass" || var.lifecycle_configuration[0].lifecycle_action_type == "Delete"
+    error_message = "The type of action of the lifecycle rule must be either Delete or SetStorageClass."
+  }
 }
 
 
