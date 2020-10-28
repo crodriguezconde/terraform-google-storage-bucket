@@ -75,7 +75,7 @@ variable "lifecycle_configuration" {
   }]
 
   validation {
-    condition     = var.lifecycle_configuration[0].lifecycle_action_type == "SetStorageClass" || var.lifecycle_configuration[0].lifecycle_action_type == "Delete"
+    condition     = ! contains([for action_type in var.lifecycle_configuration[*].lifecycle_action_type : action_type == "SetStorageClass" || action_type == "Delete" ? true : false], false)
     error_message = "The type of action of the lifecycle rule must be either Delete or SetStorageClass."
   }
 }
