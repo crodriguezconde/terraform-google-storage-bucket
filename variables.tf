@@ -69,7 +69,7 @@ variable "lifecycle_configuration" {
     target_storage_class         = "REGIONAL",
     minimum_object_age           = 0,
     object_creation_date         = null,
-    object_with_state            = null,
+    object_with_state            = "LIVE",
     object_matches_storage_class = ["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"],
     limit_num_object_versions    = null
   }]
@@ -86,6 +86,11 @@ variable "lifecycle_configuration" {
   validation {
     condition     = ! contains([for target_storage_class in var.lifecycle_configuration[*].target_storage_class : contains(["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE"], target_storage_class)], false)
     error_message = "The Storage Class must be MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, or ARCHIVE."
+  }
+
+  validation {
+    condition     = ! contains([for with_state in var.lifecycle_configuration[*].object_with_state : contains(["LIVE", "ARCHIVED", "ANY"], with_state) if with_state != null], false)
+    error_message = "Supported values are LIVE, ARCHIVED, ANY."
   }
 }
 
