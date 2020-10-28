@@ -89,6 +89,10 @@ variable "lifecycle_configuration" {
   }
 
   validation {
+    # This condition works like the previous one with the difference that this value could be null. Therefore, if the value is different then null
+    # we proceed as we would normally do with the above ones. If the value is null however, the [for...] does not produce any true/false values
+    # Therefore, the external contains will run something like contains([],false) which will return false, but as mentioned previously, we want
+    # the validation to pass, so we invert it using !
     condition     = ! contains([for with_state in var.lifecycle_configuration[*].object_with_state : contains(["LIVE", "ARCHIVED", "ANY"], with_state) if with_state != null], false)
     error_message = "Supported values are LIVE, ARCHIVED, ANY."
   }
