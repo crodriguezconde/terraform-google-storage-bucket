@@ -70,7 +70,7 @@ variable "lifecycle_configuration" {
     minimum_object_age           = 0,
     object_creation_date         = null,
     object_with_state            = "LIVE",
-    object_matches_storage_class = ["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"],
+    object_matches_storage_class = null,
     limit_num_object_versions    = null
   }]
 
@@ -98,7 +98,7 @@ variable "lifecycle_configuration" {
   }
 
   validation {
-    condition     = ! contains([for list_storage_class in var.lifecycle_configuration[*].object_matches_storage_class : contains([for storage_class in list_storage_class[*] : contains(["REGIONAL", "MULTI_REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"], storage_class)], false)], true)
+    condition     = ! contains([for list_storage_class in var.lifecycle_configuration[*].object_matches_storage_class : contains([for storage_class in list_storage_class[*] : contains(["REGIONAL", "MULTI_REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"], storage_class)], false) if list_storage_class != null], true)
     error_message = "The input given is not valid. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE, STANDARD, DURABLE_REDUCED_AVAILABILITY."
   }
 }
