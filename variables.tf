@@ -96,6 +96,11 @@ variable "lifecycle_configuration" {
     condition     = ! contains([for with_state in var.lifecycle_configuration[*].object_with_state : contains(["LIVE", "ARCHIVED", "ANY"], with_state) if with_state != null], false)
     error_message = "Supported values are LIVE, ARCHIVED, ANY."
   }
+
+  validation {
+    condition     = ! contains([for list_storage_class in var.lifecycle_configuration[*].object_matches_storage_class : contains([for storage_class in list_storage_class[*] : contains(["REGIONAL", "MULTI_REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"], storage_class)], false)], true)
+    error_message = "The input given is not valid. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE, STANDARD, DURABLE_REDUCED_AVAILABILITY."
+  }
 }
 
 
