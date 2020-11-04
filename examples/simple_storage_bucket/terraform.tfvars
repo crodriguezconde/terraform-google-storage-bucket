@@ -5,8 +5,7 @@ storage_class             = "STANDARD"
 is_versioning_enabled     = true
 is_requester_pays_enabled = false
 logging_configuration = {
-  is_logging_enabled             = true,
   log_destination_storage_bucket = "Name of the Cloud Storage bucket the logs will be archive on."
   log_object_prefix              = "Prefix name for the Cloud Storage bucket logs"
-
 }
+lifecycle_configuration = null

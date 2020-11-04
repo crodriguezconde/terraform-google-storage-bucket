@@ -29,3 +29,7 @@ variable "is_requester_pays_enabled" {
 variable "logging_configuration" {
   description = "Describes the logging configuration for a single Cloud Storage bucket."
 }
+
+variable "lifecycle_configuration" {
+  description = "Describes whether or not the GCS has lifecycle rules enabled."
+}
