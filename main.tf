@@ -15,7 +15,7 @@ resource "google_storage_bucket" "storage_bucket" {
     # iterable list is always 1, as we are only creating 1 config per each bucket in 
     # case the logging configuration is enabled
 
-    for_each = var.logging_configuration["is_logging_enabled"] == false ? [] : var.logging_configuration[*]
+    for_each = var.logging_configuration == null ? [] : var.logging_configuration[*]
     content {
       log_bucket        = var.logging_configuration["log_destination_storage_bucket"]
       log_object_prefix = var.logging_configuration["log_object_prefix"]
@@ -24,7 +24,7 @@ resource "google_storage_bucket" "storage_bucket" {
   requester_pays = var.is_requester_pays_enabled
 
   dynamic "lifecycle_rule" {
-    for_each = var.is_lifecycle_rules_enabled == false ? [] : var.lifecycle_configuration
+    for_each = var.lifecycle_configuration == null ? [] : var.lifecycle_configuration
     # Since a user can create more than 1 lifecycle rule, this dynamic block will be created as many lifecycle rules the user 
     # creates. The lifecycle_rule.key corresponds to the position of the lifecycle rules inside the list, which are in itself
     # object(s) containing the necessary configuration.

@@ -34,12 +34,10 @@ variable "is_versioning_enabled" {
 variable "logging_configuration" {
   description = "An object that describes the behaviour of logging within the Cloud Storage bucket."
   type = object({
-    is_logging_enabled             = bool,
     log_destination_storage_bucket = string,
     log_object_prefix              = string
   })
   default = {
-    is_logging_enabled             = false,
     log_destination_storage_bucket = "The Google Cloud Storage bucket that will receive log object(s).",
     log_object_prefix              = "(Optional, Computed) The object prefix for log objects. If it is not provided, by default Google Cloud Storage sets this to this bucket's name."
   }
@@ -47,12 +45,6 @@ variable "logging_configuration" {
 
 variable "is_requester_pays_enabled" {
   description = "Enables Requester Pays on a Cloud Storage bucket."
-  type        = bool
-  default     = false
-}
-
-variable "is_lifecycle_rules_enabled" {
-  description = "Whether lifecycle configuration(s) are active on the Cloud Storage bucket"
   type        = bool
   default     = false
 }
@@ -83,12 +75,12 @@ variable "lifecycle_configuration" {
     # lifecycle_action_type there is (in case the user defines more than 1) and stores the result of the validation in a list like: [true, false, false, true]. 
     # Once we have the list, we have to throw a false to trigger the error_message, as it means that the user has input a not valid action_type. The contains searches
     # for the first false statement that it encounters and throws true if found. As error_message will only trigger if condition is false, we invert the result using !
-    condition     = ! contains([for action_type in var.lifecycle_configuration[*].lifecycle_action_type : action_type == "SetStorageClass" || action_type == "Delete" ? true : false], false)
+    condition     = var.lifecycle_configuration != null ? ! contains([for action_type in var.lifecycle_configuration[*].lifecycle_action_type : action_type == "SetStorageClass" || action_type == "Delete" ? true : false], false) : true
     error_message = "The type of action of the lifecycle rule must be either Delete or SetStorageClass."
   }
 
   validation {
-    condition     = ! contains([for target_storage_class in var.lifecycle_configuration[*].target_storage_class : contains(["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE"], target_storage_class)], false)
+    condition     = var.lifecycle_configuration != null ? ! contains([for target_storage_class in var.lifecycle_configuration[*].target_storage_class : contains(["MULTI_REGIONAL", "REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE"], target_storage_class)], false) : true
     error_message = "The Storage Class must be MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, or ARCHIVE."
   }
 
@@ -97,12 +89,12 @@ variable "lifecycle_configuration" {
     # we proceed as we would normally do with the above ones. If the value is null however, the [for...] does not produce any true/false values
     # Therefore, the external contains will run something like contains([],false) which will return false, but as mentioned previously, we want
     # the validation to pass, so we invert it using !
-    condition     = ! contains([for with_state in var.lifecycle_configuration[*].object_with_state : contains(["LIVE", "ARCHIVED", "ANY"], with_state) if with_state != null], false)
+    condition     = var.lifecycle_configuration != null ? ! contains([for with_state in var.lifecycle_configuration[*].object_with_state : contains(["LIVE", "ARCHIVED", "ANY"], with_state) if with_state != null], false) : true
     error_message = "Supported values are LIVE, ARCHIVED, ANY."
   }
 
   validation {
-    condition     = ! contains([for list_storage_class in var.lifecycle_configuration[*].object_matches_storage_class : contains([for storage_class in list_storage_class[*] : contains(["REGIONAL", "MULTI_REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"], storage_class)], false) if list_storage_class != null], true)
+    condition     = var.lifecycle_configuration != null ? ! contains([for list_storage_class in var.lifecycle_configuration[*].object_matches_storage_class : contains([for storage_class in list_storage_class[*] : contains(["REGIONAL", "MULTI_REGIONAL", "NEARLINE", "COLDLINE", "ARCHIVE", "STANDARD", "DURABLE_REDUCED_AVAILABILITY"], storage_class)], false) if list_storage_class != null], true) : true
     error_message = "The input given is not valid. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE, STANDARD, DURABLE_REDUCED_AVAILABILITY."
   }
 }
