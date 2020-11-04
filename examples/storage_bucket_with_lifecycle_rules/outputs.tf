@@ -9,7 +9,7 @@ output "storage_bucket_url" {
 }
 
 output "storage_bucket_name" {
-	description = "The name of the Cloud Storage bucket created."
-	value       = module.gcs_bucket.storage_bucket_name
+  description = "The name of the Cloud Storage bucket created."
+  value       = module.gcs_bucket.storage_bucket_name
 
 }
