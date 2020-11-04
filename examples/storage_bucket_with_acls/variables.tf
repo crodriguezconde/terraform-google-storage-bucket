@@ -37,3 +37,7 @@ variable "storage_bucket_access_role" {
 variable "storage_bucket_entity" {
   description = "The entity holding the permission, in one of the following forms: user-userId user-email group-groupId group-email domain-domain project-team-projectId allUsers allAuthenticatedUsers"
 }
+
+variable "lifecycle_configuration" {
+  description = "Describes whether or not the GCS bucket has lifecycle rules enabled."
+}

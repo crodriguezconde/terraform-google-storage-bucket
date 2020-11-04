@@ -23,6 +23,7 @@ module "gcs_bucket" {
   is_versioning_enabled     = var.is_versioning_enabled
   is_requester_pays_enabled = var.is_requester_pays_enabled
   logging_configuration     = var.logging_configuration
+  lifecycle_configuration   = var.lifecycle_configuration
 }
 
 module "gcs_bucket_acl" {
